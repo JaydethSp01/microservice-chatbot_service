@@ -1,10 +1,18 @@
 import os
-# Deshabilitar CUDA para forzar el uso de CPU
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+# Configuración inicial agresiva para evitar GPU
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"] = ""  # Más estricto que "-1"
 os.environ["TF_XLA_FLAGS"] = "--tf_xla_enable_xla_devices=false"
-os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"  # Desactiva oneDNN
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
-os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "false"  # Evita que TensorFlow intente usar GPU
+os.environ["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
+
+# Importar y configurar TensorFlow antes que nada
+import tensorflow as tf
+tf.config.set_visible_devices([], 'GPU')
+tf.get_logger().setLevel('ERROR')
+
+# Resto de imports
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="tensorflow")
 import re
