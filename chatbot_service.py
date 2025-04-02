@@ -1,4 +1,4 @@
-
+import os
 import re
 import logging
 from datetime import datetime, timedelta
@@ -8,15 +8,18 @@ from futbol_dao import EquipoDAO
 from serpapi import GoogleSearch
 from bson import ObjectId
 
+# Deshabilitar CUDA para forzar el uso de CPU
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
 # Configuración de logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 app = Flask(__name__)
 
-# Clave de SerpAPI (puedes obtenerla desde una variable de entorno en producción)
-SERPAPI_KEY = "391feb88b916e9a5ae927a1145c538bd92ac85aa95afa0ec81907a6969f9692f"
+# Clave de SerpAPI (idealmente obtenida desde una variable de entorno en producción)
+SERPAPI_KEY = os.environ.get("SERPAPI_KEY", "391feb88b916e9a5ae927a1145c538bd92ac85aa95afa0ec81907a6969f9692f")
 
-# Inicialización del pipeline de QA
+# Inicialización del pipeline de QA forzando el uso de CPU (device=-1)
 qa_pipeline = pipeline(
     "question-answering",
     model="distilbert-base-cased-distilled-squad",
@@ -298,5 +301,7 @@ def chat():
         return jsonify({"error": "Error interno del servidor"}), 500
 
 if __name__ == "__main__":
-    logging.info("🚀 Chatbot Service iniciado en http://localhost:5001")
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    # Obtener el puerto desde la variable de entorno PORT (necesario para Render) o usar 5001 por defecto
+    port = int(os.environ.get("PORT", 5001))
+    logging.info(f"🚀 Chatbot Service iniciado en http://0.0.0.0:{port}")
+    app.run(host="0.0.0.0", port=port, debug=True)
