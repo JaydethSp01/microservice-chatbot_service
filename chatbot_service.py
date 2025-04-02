@@ -4,6 +4,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 os.environ["TF_XLA_FLAGS"] = "--tf_xla_enable_xla_devices=false"
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"  # Desactiva oneDNN
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "false"  # Evita que TensorFlow intente usar GPU
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="tensorflow")
 import re
@@ -310,4 +311,4 @@ if __name__ == "__main__":
     # Obtener el puerto desde la variable de entorno PORT (necesario para Render) o usar 5001 por defecto
     port = int(os.environ.get("PORT", 5001))
     logging.info(f"🚀 Chatbot Service iniciado en http://0.0.0.0:{port}")
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=port, debug=False, use_reloader=False)
