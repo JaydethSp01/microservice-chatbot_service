@@ -1,4 +1,11 @@
 import os
+# Deshabilitar CUDA para forzar el uso de CPU
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ["TF_XLA_FLAGS"] = "--tf_xla_enable_xla_devices=false"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"  # Desactiva oneDNN
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="tensorflow")
 import re
 import logging
 from datetime import datetime, timedelta
@@ -8,11 +15,7 @@ from futbol_dao import EquipoDAO
 from serpapi import GoogleSearch
 from bson import ObjectId
 
-# Deshabilitar CUDA para forzar el uso de CPU
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-os.environ["TF_XLA_FLAGS"] = "--tf_xla_enable_xla_devices=false"
 
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
 # Configuración de logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
