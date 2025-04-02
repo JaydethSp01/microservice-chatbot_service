@@ -1,5 +1,3 @@
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Deshabilita GPU y usa solo CPU
 
 import re
 import logging
@@ -22,7 +20,8 @@ SERPAPI_KEY = "391feb88b916e9a5ae927a1145c538bd92ac85aa95afa0ec81907a6969f9692f"
 qa_pipeline = pipeline(
     "question-answering",
     model="distilbert-base-cased-distilled-squad",
-    max_answer_length=150
+    max_answer_length=150,
+    device=-1
 )
 
 # Cache para almacenar información de jugadores (con caducidad de 12 horas)
