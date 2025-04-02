@@ -10,7 +10,10 @@ from bson import ObjectId
 
 # Deshabilitar CUDA para forzar el uso de CPU
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3" 
+os.environ["TF_XLA_FLAGS"] = "--tf_xla_enable_xla_devices=false"
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+
 # Configuración de logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
