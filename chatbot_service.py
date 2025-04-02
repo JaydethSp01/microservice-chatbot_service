@@ -50,7 +50,8 @@ qa_pipeline = pipeline(
     "question-answering",
     model="distilbert-base-cased-distilled-squad",
     max_answer_length=150,
-    device=-1
+    device=-1,
+    framework="pt" 
 )
 
 # Cache para almacenar información de jugadores (con caducidad de 12 horas)
