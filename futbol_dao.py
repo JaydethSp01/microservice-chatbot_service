@@ -4,6 +4,9 @@ from serpapi import GoogleSearch
 import os
 import re
 from datetime import datetime, timedelta
+# Deshabilitar CUDA para forzar el uso de CPU
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3" 
 
 class EquipoDAO:
     """Clase de acceso a datos para equipos y jugadores en MongoDB."""
