@@ -1,10 +1,12 @@
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Deshabilita GPU y usa solo CPU
+
 import re
 import logging
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify
 from transformers import pipeline
-from futbol_dao import EquipoDAO
+from microservices.chatbot_service.futbol_dao import EquipoDAO
 from serpapi import GoogleSearch
 from bson import ObjectId
 
