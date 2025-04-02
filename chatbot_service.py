@@ -1,20 +1,31 @@
+# custom_init.py
 import os
-# Configuración inicial agresiva para evitar GPU
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = ""  # Más estricto que "-1"
-os.environ["TF_XLA_FLAGS"] = "--tf_xla_enable_xla_devices=false"
-os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
-os.environ["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
-
-# Importar y configurar TensorFlow antes que nada
-import tensorflow as tf
-tf.config.set_visible_devices([], 'GPU')
-tf.get_logger().setLevel('ERROR')
-
-# Resto de imports
 import warnings
-warnings.filterwarnings("ignore", category=UserWarning, module="tensorflow")
+
+def disable_tf_gpu():
+    """Deshabilita completamente GPU para TensorFlow"""
+    os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+    os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+    os.environ["TF_USE_LEGACY_KERAS"] = "1"
+    
+    # Esto debe estar antes de cualquier import de TF
+    os.environ["NO_GPU"] = "1"
+    os.environ["CUDA_TOOLKIT_ROOT_DIR"] = ""
+    
+    # Suppress warnings
+    warnings.filterwarnings("ignore", category=UserWarning)
+    warnings.filterwarnings("ignore", category=DeprecationWarning)
+    
+    # Import TF y configurar
+    import tensorflow as tf
+    tf.get_logger().setLevel('ERROR')
+    tf.autograph.set_verbosity(0)
+    tf.config.set_visible_devices([], 'GPU')
+    
+    return tf
+
+# Llama a la función inmediatamente
+tf = disable_tf_gpu()
 import re
 import logging
 from datetime import datetime, timedelta
